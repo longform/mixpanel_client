@@ -19,7 +19,8 @@ module Mixpanel
     end
 
     def self.get(uri)
-      ::URI.parse(uri).read
+      response = ::URI.parse(uri).read
+      response = response.read if response.kind_of?(Tempfile)
     rescue OpenURI::HTTPError => error
       raise HTTPError, JSON.parse(error.io.read)['error']
     end
